@@ -32,35 +32,55 @@ def main():
 
     bats.append(Bat((400, 500), control_scheme1))
 
-    balls = [Ball((400, 300), pygame.Color(255,255,255))]
-
-    total_ball_bounces = 0
+    ball = Ball((400, 300))
 
     clock = pygame.time.Clock() 
 
-    gravity = [0.0, 400.0]
+    gravity = [0.0, 1000.0]
     running = True  
     while running:
 
-        frame_time = clock.tick(60)
+        frame_time = clock.tick()
         time_delta = frame_time/1000.0
              
         for event in pygame.event.get():
             if event.type == QUIT:
                 running = False
+            # --------------------------------------------------------
+            # Challenge 2
+            # --------------
+            #
+            # Add a keyboard key that creates
+            # a new ball at a random point on the screen
+            # each time you press it.
+            #
+            # You'll need to:
+            #
+            # - Create a list to hold the balls
+            #   instead of the current single 'ball' variable and
+            #   update the code in this file.
+            #
+            # - add a new if statement to check your key.
+            #
+            # - Use the random.randint(a, b) function where 'a' is
+            #   the lowest value and 'b' is the highest value you want
+            #   to get a number between.
+            # --------------------------------------------------------
 
+            # --------------------------------------------------------
+            # Challenge 3
+            # -------------
+            #
+            # Now see if you can update the code you just finished
+            # to randomly change the colour of the balls you create.
+            #
+            # Remember you can create a pygame.Color variable by passing
+            # it three numbers between 0 and 255 representing red, green
+            # and blue respectively.
+            # --------------------------------------------------------
             if event.type == KEYDOWN:
                 if event.key == K_r:
-                    for ball in balls:
-                        ball.reset()
-
-                if event.key == K_SPACE:
-                    x_pos = random.randint(20, 780)
-                    y_pos = random.randint(20, 580)
-                    ball_colour = pygame.Color(random.randint(100, 255),
-                                               random.randint(100, 255),
-                                               random.randint(100, 255))
-                    balls.append(Ball((x_pos, y_pos), ball_colour))
+                    ball.reset()
 
             for bat in bats:
                 bat.process_event(event)
@@ -74,11 +94,10 @@ def main():
             bat.update(time_delta)
             bat.render(screen)
 
-        total_ball_bounces = 0
-        for ball in balls:
-            ball.update(time_delta, gravity, walls, bats)
-            total_ball_bounces += ball.number_of_bounces
-            ball.render(screen)
+        ball.update(time_delta, gravity, walls, bats)
+        total_ball_bounces = ball.number_of_bounces
+        
+        ball.render(screen)
 
         bounce_text = font.render("Bounces: " + str(total_ball_bounces), True, pygame.Color(255, 255, 255))
         screen.blit(bounce_text, bounce_text.get_rect(x=650, y=30))

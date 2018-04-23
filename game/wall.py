@@ -6,7 +6,7 @@ class Wall:
         self.rect = pygame.Rect(top_left, (bottom_right[0]-top_left[0], bottom_right[1]-top_left[1]))
         self.wall_colour = pygame.Color(200, 200, 200, 200)
 
-        self.bounce_factor = 1.01
+        self.bounce_factor = 0.85
 
         if abs(top_left[0] - bottom_right[0]) > abs(top_left[1] - bottom_right[1]):
             self.is_horiz = True
