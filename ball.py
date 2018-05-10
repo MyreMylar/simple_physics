@@ -21,6 +21,18 @@ class Ball:
         self.terminal_velocity = 20.0
         self.number_of_bounces = 0
 
+        self.verts = []
+        self.verts.append(self.rect.topleft)
+        self.verts.append(self.rect.topright)
+        self.verts.append(self.rect.bottomleft)
+        self.verts.append(self.rect.bottomright)
+
+        self.edges = []
+        self.edges.append([self.rect.topleft, self.rect.topright])
+        self.edges.append([self.rect.topleft, self.rect.bottomleft])
+        self.edges.append([self.rect.bottomright, self.rect.topright])
+        self.edges.append([self.rect.bottomright, self.rect.bottomleft])
+
     @staticmethod
     def make_random_start_vector():
         # make a normalised angle aiming roughly toward one of the goals
@@ -64,17 +76,25 @@ class Ball:
                     self.number_of_bounces += 1
 
         for bat in bats:
-            if self.rect.colliderect(bat.rect):
+            if bat.collide_polygon_with_polygon(bat, self):
                 collided_this_frame = True
                 if bat not in self.collided_with_things:
                     self.collided_with_things.append(bat)
                     
                     collided_horiz_this_frame = True
-                    self.velocity[1] = self.velocity[1] * -1  # this does the basic bounce reflection
 
-                    # this scales our bounce by the bat's bounciness
-                    self.velocity[1] = self.velocity[1] * bat.bounce_factor
-                    self.velocity[0] = self.velocity[0] * bat.bounce_factor
+                    v_n = self.dot(self.velocity, bat.normal_vec)
+                    n_n = self.dot(bat.normal_vec, bat.normal_vec)
+                    u_div = (v_n / n_n)
+                    u = [u_div * bat.normal_vec[0], u_div * bat.normal_vec[1]]
+                    w = [self.velocity[0] - u[0], self.velocity[1] - u[1]]
+
+                    friction = 1
+                    elasticity = bat.bounce_factor  # this scales our bounce by the bat's bounciness
+                    w_friction = [w[0] * friction, w[1] * friction]
+                    u_elasticity = [u[0] * elasticity, u[1] * elasticity]
+                    new_velocity = [w_friction[0] - u_elasticity[0], w_friction[1] - u_elasticity[1]]
+                    self.velocity = new_velocity
 
                     self.number_of_bounces += 1
 
@@ -107,5 +127,22 @@ class Ball:
         self.rect.x = self.position[0]
         self.rect.y = self.position[1]
 
+        self.verts[:] = []
+        self.verts.append(self.rect.topleft)
+        self.verts.append(self.rect.topright)
+        self.verts.append(self.rect.bottomleft)
+        self.verts.append(self.rect.bottomright)
+
+        self.edges[:] = []
+        self.edges.append([self.rect.topleft, self.rect.topright])
+        self.edges.append([self.rect.topleft, self.rect.bottomleft])
+        self.edges.append([self.rect.bottomright, self.rect.topright])
+        self.edges.append([self.rect.bottomright, self.rect.bottomleft])
+
     def render(self, screen):
         pygame.draw.rect(screen, self.ball_colour, self.rect)
+
+    @staticmethod
+    def dot(vec_1, vec_2):
+        product = vec_1[0] * vec_2[0] + vec_1[1] * vec_2[1]
+        return product

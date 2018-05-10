@@ -32,7 +32,7 @@ def main():
 
     bats.append(Bat((400, 500), control_scheme1))
 
-    balls = [Ball((400, 300), pygame.Color(255,255,255))]
+    balls = [Ball((400, 300), pygame.Color("#FFFFFF"))]
 
     total_ball_bounces = 0
 
@@ -80,7 +80,7 @@ def main():
             total_ball_bounces += ball.number_of_bounces
             ball.render(screen)
 
-        bounce_text = font.render("Bounces: " + str(total_ball_bounces), True, pygame.Color(255, 255, 255))
+        bounce_text = font.render("Bounces: " + str(total_ball_bounces), True, pygame.Color("#FFFFFF"))
         screen.blit(bounce_text, bounce_text.get_rect(x=650, y=30))
                 
         pygame.display.flip()  # flip all our drawn stuff onto the screen
