@@ -5,12 +5,12 @@ import random
 
 class Ball:
 
-    def __init__(self, start_pos):
+    def __init__(self, start_pos, colour):
         self.ball_speed = 350.0
         random_vec = self.make_random_start_vector()
         self.velocity = [random_vec[0] * self.ball_speed, random_vec[1] * self.ball_speed]
         self.rect = pygame.Rect((start_pos[0] - 5, start_pos[1] - 5), (10, 10))
-        self.ball_colour = pygame.Color(255, 255, 255)
+        self.ball_colour = colour
         self.position = [float(start_pos[0]), float(start_pos[1])]
         self.start_position = [self.position[0], self.position[1]]
 

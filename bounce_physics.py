@@ -46,20 +46,42 @@ def main():
         for event in pygame.event.get():
             if event.type == QUIT:
                 running = False
+            # --------------------------------------------------------
+            # Challenge 2
+            # --------------
+            #
+            # Add a keyboard key that creates
+            # a new ball at a random point on the screen
+            # each time you press it.
+            #
+            # You'll need to:
+            #
+            # - Create a list to hold the balls
+            #   instead of the current single 'ball' variable and
+            #   update the code in this file.
+            #
+            # - add a new if statement to check your key.
+            #
+            # - Use the random.randint(a, b) function where 'a' is
+            #   the lowest value and 'b' is the highest value you want
+            #   to get a number between.
+            # --------------------------------------------------------
 
+            # --------------------------------------------------------
+            # Challenge 3
+            # -------------
+            #
+            # Now see if you can update the code you just finished
+            # to randomly change the colour of the balls you create.
+            #
+            # Remember you can create a pygame.Color variable by passing
+            # it three numbers between 0 and 255 representing red, green
+            # and blue respectively.
+            # --------------------------------------------------------
             if event.type == KEYDOWN:
                 if event.key == K_r:
                     for ball in balls:
                         ball.reset()
-
-                if event.key == K_SPACE:
-                    x_pos = random.randint(20, 780)
-                    y_pos = random.randint(20, 580)
-                    ball_colour = pygame.Color("#000000")
-                    ball_colour.r = random.randint(100, 255)
-                    ball_colour.g = random.randint(100, 255)
-                    ball_colour.b = random.randint(100, 255)
-                    balls.append(Ball((x_pos, y_pos), ball_colour))
 
             for bat in bats:
                 bat.process_event(event)
