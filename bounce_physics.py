@@ -12,8 +12,8 @@ import random
 def main():
    
     pygame.init()
-    screen = pygame.display.set_mode((800, 600))
     pygame.display.set_caption('Bounce Physics')
+    screen = pygame.display.set_mode((800, 600))
 
     background = pygame.Surface(screen.get_size())
     background = background.convert(screen)
@@ -32,11 +32,11 @@ def main():
 
     bats.append(Bat((400, 500), control_scheme1))
 
-    ball = Ball((400, 300))
+    balls = [Ball((400, 300), pygame.Color("#FFFFFF"))]
 
     clock = pygame.time.Clock() 
 
-    gravity = [0.0, 1000.0]
+    gravity = [0.0, 400.0]
     running = True  
     while running:
 
@@ -46,41 +46,20 @@ def main():
         for event in pygame.event.get():
             if event.type == QUIT:
                 running = False
-            # --------------------------------------------------------
-            # Challenge 2
-            # --------------
-            #
-            # Add a keyboard key that creates
-            # a new ball at a random point on the screen
-            # each time you press it.
-            #
-            # You'll need to:
-            #
-            # - Create a list to hold the balls
-            #   instead of the current single 'ball' variable and
-            #   update the code in this file.
-            #
-            # - add a new if statement to check your key.
-            #
-            # - Use the random.randint(a, b) function where 'a' is
-            #   the lowest value and 'b' is the highest value you want
-            #   to get a number between.
-            # --------------------------------------------------------
 
-            # --------------------------------------------------------
-            # Challenge 3
-            # -------------
-            #
-            # Now see if you can update the code you just finished
-            # to randomly change the colour of the balls you create.
-            #
-            # Remember you can create a pygame.Color variable by passing
-            # it three numbers between 0 and 255 representing red, green
-            # and blue respectively.
-            # --------------------------------------------------------
             if event.type == KEYDOWN:
                 if event.key == K_r:
-                    ball.reset()
+                    for ball in balls:
+                        ball.reset()
+
+                if event.key == K_SPACE:
+                    x_pos = random.randint(20, 780)
+                    y_pos = random.randint(20, 580)
+                    ball_colour = pygame.Color("#000000")
+                    ball_colour.r = random.randint(100, 255)
+                    ball_colour.g = random.randint(100, 255)
+                    ball_colour.b = random.randint(100, 255)
+                    balls.append(Ball((x_pos, y_pos), ball_colour))
 
             for bat in bats:
                 bat.process_event(event)
@@ -94,17 +73,16 @@ def main():
             bat.update(time_delta)
             bat.render(screen)
 
-        ball.update(time_delta, gravity, walls, bats)
-        total_ball_bounces = ball.number_of_bounces
-
-        ball.render(screen)
+        total_ball_bounces = 0
+        for ball in balls:
+            ball.update(time_delta, gravity, walls, bats)
+            total_ball_bounces += ball.number_of_bounces
+            ball.render(screen)
 
         bounce_text = font.render("Bounces: " + str(total_ball_bounces), True, pygame.Color("#FFFFFF"))
         screen.blit(bounce_text, bounce_text.get_rect(x=650, y=30))
                 
         pygame.display.flip()  # flip all our drawn stuff onto the screen
-
-    pygame.quit()  # exited game loop so quit pygame
 
 
 if __name__ == '__main__':
