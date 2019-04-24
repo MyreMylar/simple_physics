@@ -12,8 +12,8 @@ import random
 def main():
    
     pygame.init()
-    screen = pygame.display.set_mode((800, 600))
     pygame.display.set_caption('Bounce Physics')
+    screen = pygame.display.set_mode((800, 600))
 
     background = pygame.Surface(screen.get_size())
     background = background.convert(screen)
@@ -33,8 +33,6 @@ def main():
     bats.append(Bat((400, 500), control_scheme1))
 
     balls = [Ball((400, 300), pygame.Color("#FFFFFF"))]
-
-    total_ball_bounces = 0
 
     clock = pygame.time.Clock() 
 
@@ -57,9 +55,10 @@ def main():
                 if event.key == K_SPACE:
                     x_pos = random.randint(20, 780)
                     y_pos = random.randint(20, 580)
-                    ball_colour = pygame.Color(random.randint(100, 255),
-                                               random.randint(100, 255),
-                                               random.randint(100, 255))
+                    ball_colour = pygame.Color("#000000")
+                    ball_colour.r = random.randint(100, 255)
+                    ball_colour.g = random.randint(100, 255)
+                    ball_colour.b = random.randint(100, 255)
                     balls.append(Ball((x_pos, y_pos), ball_colour))
 
             for bat in bats:
@@ -84,8 +83,6 @@ def main():
         screen.blit(bounce_text, bounce_text.get_rect(x=650, y=30))
                 
         pygame.display.flip()  # flip all our drawn stuff onto the screen
-
-    pygame.quit()  # exited game loop so quit pygame
 
 
 if __name__ == '__main__':
