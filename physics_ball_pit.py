@@ -3,6 +3,7 @@ import pygame
 import math
 from random import random
 from pygame.math import Vector2
+import pygame.gfxdraw
 
 """
 A Physics toy based on this blog entitled 'Six useful snippets':
@@ -155,6 +156,7 @@ while running:
         # Draw:
         screen.blit(background, (0, 0))
         for ball in balls:
-            pygame.draw.circle(screen, ball.color, (int(ball.pos.x), int(ball.pos.y)), int(ball.radius))
+            pygame.gfxdraw.aacircle(screen, int(ball.pos.x), int(ball.pos.y), int(ball.radius), ball.color)
+            pygame.gfxdraw.filled_circle(screen, int(ball.pos.x), int(ball.pos.y), int(ball.radius), ball.color)
 
     pygame.display.flip()
